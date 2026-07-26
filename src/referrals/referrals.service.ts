@@ -35,13 +35,14 @@ export class ReferralsService {
   // Called once the referred user's phone is verified — rewards the referrer.
   // Idempotent via the unique constraint on referredUserId.
   async rewardReferrerIfEligible(referredUser: User) {
-    if (!referredUser.referredByUserId) return null;
+    const referrerId = referredUser.referredByUserId;
+    if (!referrerId) return null;
 
     const alreadyRewarded = await this.referralRepo.findOne({ where: { referredUserId: referredUser.id } });
     if (alreadyRewarded) return null;
 
     return this.dataSource.transaction(async (manager) => {
-      const referrerWallet = await manager.findOne(Wallet, { where: { user: { id: referredUser.referredByUserId } } });
+      const referrerWallet = await manager.findOne(Wallet, { where: { user: { id: referrerId } } });
       if (!referrerWallet) return null;
 
       referrerWallet.coinBalance = Number(referrerWallet.coinBalance) + REFERRAL_REWARD_COINS;
@@ -49,7 +50,7 @@ export class ReferralsService {
 
       await manager.save(
         manager.create(Transaction, {
-          user: { id: referredUser.referredByUserId } as any,
+          user: { id: referrerId } as any,
           type: TransactionType.ADMIN_ADJUSTMENT,
           amount: REFERRAL_REWARD_COINS,
           currency: 'coin',
@@ -59,7 +60,7 @@ export class ReferralsService {
 
       return manager.save(
         manager.create(Referral, {
-          referrerId: referredUser.referredByUserId,
+          referrerId: referrerId,
           referredUserId: referredUser.id,
           rewardCoins: REFERRAL_REWARD_COINS,
         }),
