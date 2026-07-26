@@ -67,10 +67,10 @@ export class User {
   phoneVerified: boolean;
 
   @Column({ nullable: true, select: false })
-  otpCodeHash: string;
+  otpCodeHash: string | null;
 
   @Column({ type: 'timestamptz', nullable: true, select: false })
-  otpExpiresAt: Date;
+  otpExpiresAt: Date | null;
 
   @Column({ default: 0 })
   levelXp: number;
@@ -79,7 +79,7 @@ export class User {
   referralCode: string;
 
   @Column({ nullable: true })
-  referredByUserId: string;
+  referredByUserId: string | null;
 
   @CreateDateColumn()
   createdAt: Date;
