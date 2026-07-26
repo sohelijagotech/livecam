@@ -24,7 +24,7 @@ export class DeviceToken {
   token: string; // FCM registration token
 
   @Column({ nullable: true })
-  platform: string; // 'ios' | 'android'
+  platform: string | null; // 'ios' | 'android'
 
   @CreateDateColumn()
   createdAt: Date;
