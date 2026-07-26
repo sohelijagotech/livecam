@@ -39,7 +39,7 @@ export class NotificationsService implements OnModuleInit {
     const existing = await this.tokenRepo.findOne({ where: { token } });
     if (existing) {
       existing.userId = userId;
-      existing.platform = platform;
+      existing.platform = platform ?? null;
       return this.tokenRepo.save(existing);
     }
     return this.tokenRepo.save(this.tokenRepo.create({ userId, token, platform } as any));
