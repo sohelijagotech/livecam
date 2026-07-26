@@ -66,7 +66,7 @@ export class User {
   @Column({ default: false })
   phoneVerified: boolean;
 
-  @Column({ nullable: true, select: false })
+  @Column({ type: 'varchar', nullable: true, select: false })
   otpCodeHash: string | null;
 
   @Column({ type: 'timestamptz', nullable: true, select: false })
@@ -78,7 +78,7 @@ export class User {
   @Column({ unique: true, nullable: true })
   referralCode: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   referredByUserId: string | null;
 
   @CreateDateColumn()
