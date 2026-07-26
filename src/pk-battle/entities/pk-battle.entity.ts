@@ -55,7 +55,7 @@ export class PkBattle {
   endedAt: Date;
 
   @Column({ nullable: true })
-  winnerHostId: string;
+  winnerHostId: string | null;
 
   @CreateDateColumn()
   createdAt: Date;
