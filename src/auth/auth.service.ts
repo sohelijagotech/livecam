@@ -114,7 +114,7 @@ export class AuthService {
       select: ['id', 'phone', 'role', 'otpCodeHash', 'otpExpiresAt', 'phoneVerified', 'referredByUserId'],
     });
     if (!user || !user.otpCodeHash) throw new BadRequestException('No OTP requested');
-    if (user.otpExpiresAt < new Date()) throw new BadRequestException('OTP expired');
+    if (!user.otpExpiresAt || user.otpExpiresAt < new Date()) throw new BadRequestException('OTP expired');
 
     const valid = await bcrypt.compare(dto.code, user.otpCodeHash);
     if (!valid) throw new BadRequestException('Invalid OTP');
