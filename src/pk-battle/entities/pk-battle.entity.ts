@@ -54,7 +54,7 @@ export class PkBattle {
   @Column({ type: 'timestamptz', nullable: true })
   endedAt: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   winnerHostId: string | null;
 
   @CreateDateColumn()
